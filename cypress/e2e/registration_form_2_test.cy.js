@@ -19,10 +19,25 @@ describe('Section 1: Functional tests', () => {
 
     it('User can use only same both first and validation passwords', ()=>{
         // Add test steps for filling in only mandatory fields
+        cy.get('[data-testid="user"]').type('username')
+        cy.get('#email').type('test@test.eu')
+        cy.get('[data-cy="name"]').type('Erlend')
+        cy.get('[data-testid="lastNameTestId"]').type('Petker')
+        cy.get('[data-testid="phoneNumberTestId"]').type('55667788')
+
         // Type confirmation password which is different from first password
+        cy.get('input[name="password"]').type('MyPassEP')
+        cy.get('[name="confirm"]').type('MyPassEP2')
+
         // Assert that submit button is not enabled
+        cy.get('.submit_button').should('be.disabled')
+
         // Assert that successful message is not visible
+        cy.get('#success_message').should('not.be.visible')
+
         // Assert that error message is visible
+        cy.get(':nth-child(52)').should('be.visible')
+
     })
 
     it('Check that submit button cannot be selected if username is empty', () => {
@@ -55,6 +70,14 @@ describe('Section 2: Visual tests', () => {
 
     // Create similar test for checking second picture
 
+    it.only('Check that Cypress logo is correct and has correct size', () => {
+        cy.log('Will check logo source and size')
+        cy.get('[data-cy="cypress_logo"]').invoke('height').should('be.lessThan', 100)
+        .and('be.greaterThan', 50)
+
+    })
+
+
     it('Check navigation part', () => {
         cy.get('nav').children().should('have.length', 2)
 
@@ -72,6 +95,20 @@ describe('Section 2: Visual tests', () => {
 
     it('Check that URL to Cerebrum Hub page is correct and clickable', () => {
         //Create similar test for checking second link to Cerebrum Hub homepage
+
+        cy.get('nav').children().should('have.length', 2)
+
+        // Get navigation element, find siblings that contains h1 and check if it has Registration form in string
+        cy.get('nav').siblings('h1').should('have.text', 'Registration form number 2')
+        cy.get('nav').children().eq(1).should('be.visible')
+            .and('have.attr', 'href', 'https://cerebrumhub.com/')
+            .click()
+        // Check that currently opened URL is value:
+        cy.url().should('contain', 'https://cerebrumhub.com/')
+        // Visit previous page
+        cy.go('back')
+        cy.log('Back again in registration form 2')
+
     })
 
     it('Check that radio button list is correct', () => {

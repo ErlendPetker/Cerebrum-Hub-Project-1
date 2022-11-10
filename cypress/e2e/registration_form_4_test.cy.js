@@ -5,25 +5,26 @@ beforeEach(() => {
 // Workshop #10 analyze and fix failed test
 describe('Input fields', ()=>{
     it('Username cannot be empty string', ()=>{
-        cy.get('.username').type(' ')
-        cy.window().scrollTo('fotter')
-        cy.get('h2').contains('password').click()
-        cy.get('#input_error_message').should('not.be.visible')
+        cy.get('#username').type(' ')
+        cy.window().scrollTo('bottom')
+        cy.get('h2').contains('Password section').click()
+        cy.get('#input_error_message').should('be.visible')
         cy.get('#success_message').should('not.be.visible')
-        cy.get('#password_error_message').should('have.css', 'display', 'block')
+        cy.get('#password_error_message').should('have.css', 'display', 'none')
     })
 
-    it('Username tooltip changes depending on input value', ()=>{
+    it.only('Username tooltip changes depending on input value', ()=>{
         // get username
         // empty field should show - Please add username
         // add faulty string
         // input field with wrong format - Input field contains not supported character
         // If data is valid then no tooltip is present
         cy.get('#username').type('{enter}')
-        cy.get('h1').contains('Password').click()
-        cy.get('#username').should('have.attr', 'another_one').should('contain', 'Please username')
-        cy.get('#username').should('have.css', 'box-shadow').should('contain', 'rgb(255, 255, 0)')
-        cy.get('input[name="username"]:invalid').invoke('prop', 'validationMessage').should('contain', 'fill in this field')
+        cy.get('h2').contains('Password').click()
+        cy.get('#username').should('have.attr', 'placeholder').should('contain', 'John01')
+        cy.get('#username').should('have.css', 'box-shadow').should('contain', 'rgb(255, 0, 0)')
+        cy.get('input[name="username"]:invalid').invoke('prop', 'validationMessage').should('contain', 'fill out this field')
+
     })
 
     it('Username support only string characters', ()=>{
